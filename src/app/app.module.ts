@@ -11,7 +11,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { MayusculasPipe } from './pipes/mayusculas.pipe';
 
 @NgModule({
-  declarations: [AppComponent, MayusculasPipe],
+  declarations: [AppComponent],
   entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule],
   providers: [
