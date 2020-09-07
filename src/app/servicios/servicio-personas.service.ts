@@ -4,6 +4,7 @@ import {Persona} from '../modelo/persona';
   providedIn: 'root'
 })
 export class ServicioPersonasService {
+ 
 
   public personas:Persona[];
   constructor() { 
@@ -17,4 +18,9 @@ export class ServicioPersonasService {
   public getPersona(id):Persona{
     return this.personas.find(persona=>persona.id==id);
   }
+  public eliminarPersona(item: Persona) {
+    let indice = this.personas.indexOf(item);
+    this.personas = [...this.personas.slice(0,indice),...this.personas.slice(indice+1)];
+  }
+
 }

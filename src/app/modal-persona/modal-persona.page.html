@@ -1,9 +1,24 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>modalPersona</ion-title>
-  </ion-toolbar>
+    <ion-toolbar>
+        <ion-title>Añadir persona</ion-title>
+        <ion-buttons slot="end">
+            <ion-button (click)="cerrar()">Salir</ion-button>
+        </ion-buttons>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
+    <form [formGroup]="formulario" (ngSubmit)="enviar(formulario.value)">
+        <ion-item>
+            <ion-label position="floating"> Nombre </ion-label>
+            <ion-input formControlName="nombre" type="text"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label position="floating"> Apellido </ion-label>
+            <ion-input formControlName="apellido" type="text"></ion-input>
+        </ion-item>
+        <ion-button color="primary" expand="block" type="submit" [disabled]="!formulario.valid">
+            Añadir
+        </ion-button>
+    </form>
 </ion-content>

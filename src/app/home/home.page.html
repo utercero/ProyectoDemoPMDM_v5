@@ -5,11 +5,11 @@
 </ion-header>
 <ion-content [fullscreen]="true">
     <ion-list>
-        <ion-item *ngFor="let persona of servicio.personas">
+        <ion-item *ngFor="let persona of servicio.personas" (click)=eliminar(persona)>
             <ion-label>{{persona.nombre|mayusculas}}</ion-label>
         </ion-item>
     </ion-list>
-    <ion-fab vertical="bottom" horizantal="end" slot="fixed">
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
         <ion-fab-button (click)="addPersona()">
             <ion-icon name="add-outline"></ion-icon>
         </ion-fab-button>
