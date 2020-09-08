@@ -3,6 +3,8 @@ import { ServicioPersonasService } from '../servicios/servicio-personas.service'
 import { ModalController } from '@ionic/angular';
 import {ModalPersonaPage} from '../modal-persona/modal-persona.page';
 import { Persona } from '../modelo/persona';
+import { Router } from '@angular/router';
+import {DetallePersonaPage} from '../detalle-persona/detalle-persona.page';
 
 
 @Component({
@@ -12,7 +14,7 @@ import { Persona } from '../modelo/persona';
 })
 export class HomePage {
 
-  constructor(public servicio:ServicioPersonasService,public modalCtrl:ModalController) {}
+  constructor(public servicio:ServicioPersonasService,public modalCtrl:ModalController,public router: Router) {}
   async addPersona()
   {
     //lanzar la modal
@@ -30,6 +32,9 @@ export class HomePage {
   eliminar(item:Persona)
   {
     this.servicio.eliminarPersona(item);
+  }
+  public navegar(id){
+      this.router.navigate(['/detalle-persona/'+id]);
   }
 
 }
