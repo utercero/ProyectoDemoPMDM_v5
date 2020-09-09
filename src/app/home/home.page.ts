@@ -36,5 +36,11 @@ export class HomePage {
   public navegar(id){
       this.router.navigate(['/detalle-persona/'+id]);
   }
+  public aplicarEstilosPersona(persona:Persona) {
+    let styles = {
+      'background-color': persona.nombre.startsWith("A") ? 'red' : 'transparent'
+    };
+    return styles;
+  }
 
 }
