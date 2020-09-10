@@ -10,7 +10,7 @@ export class Persona {
     }
     public static fromJson (data): Persona {
                    
-        if(!data.id || !data.nombre || data.apellido){                
+        if(!data.id || !data.nombre || !data.apellido){                
            throw (new Error("Invalid argument structure do not match with model fields"));
         }        
         return new Persona(data.nombre,data.apellido,data.id);
