@@ -2,6 +2,7 @@ import { Injectable, OnInit } from "@angular/core";
 import { Persona } from "../modelo/persona";
 import { StorageServiceService } from "./storage-service.service";
 import { HttpServiceService } from "./http-service.service";
+import { Console } from 'console';
 
 @Injectable({
   providedIn: "root",
@@ -12,9 +13,12 @@ export class ServicioPersonasService {
     private servicioStorage: StorageServiceService,
     private servicioHttp: HttpServiceService
   ) {
+   
+    
     this.servicioHttp.getList().subscribe(
       (datos) => {
         datos.map((persona) => Persona.fromJson(persona));
+        this.personas = datos;
       },
       (error) => console.log(error)
     );
@@ -22,7 +26,13 @@ export class ServicioPersonasService {
 
   public addPersona(item: Persona) {
     this.personas = [...this.personas, item];
-    this.servicioStorage.setObject("personas", this.personas);
+    this.servicioHttp.createItem(item).subscribe((data)=>{
+      console.log(data);
+    },
+    (error)=>{
+      console.log(error);
+    });
+    //this.servicioStorage.setObject("personas", this.personas);
   }
   public getPersona(id): Persona {
     return this.personas.find((persona) => persona.id == id);
@@ -33,7 +43,8 @@ export class ServicioPersonasService {
       ...this.personas.slice(0, indice),
       ...this.personas.slice(indice + 1),
     ];
-    this.servicioStorage.setObject("personas", this.personas);
+    //this.servicioHttp.deleteItem(item);
+    //this.servicioStorage.setObject("personas", this.personas);
   }
   public get() {
     /*

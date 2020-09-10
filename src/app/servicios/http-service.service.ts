@@ -39,9 +39,9 @@ export class HttpServiceService {
   }
 
   createItem(item): Observable<Persona> {
-    console.log(item);
+    let datos = `{"nombre":"${item.nombre}","apellido":"${item.apellido}"}`;
     return this.http
-      .post<Persona>(this.base_path, JSON.stringify(item), this.httpOptions)
+      .post<Persona>(this.base_path, datos, this.httpOptions)
       .pipe(retry(2), catchError(this.handleError));
   }
 
