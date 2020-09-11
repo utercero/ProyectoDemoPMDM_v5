@@ -2,7 +2,7 @@ import { Injectable, OnInit } from "@angular/core";
 import { Persona } from "../modelo/persona";
 import { StorageServiceService } from "./storage-service.service";
 import { HttpServiceService } from "./http-service.service";
-import { Console } from 'console';
+import { delay } from "rxjs/operators";
 
 @Injectable({
   providedIn: "root",
@@ -13,25 +13,44 @@ export class ServicioPersonasService {
     private servicioStorage: StorageServiceService,
     private servicioHttp: HttpServiceService
   ) {
-   
-    
-    this.servicioHttp.getList().subscribe(
-      (datos) => {
-        datos.map((persona) => Persona.fromJson(persona));
-        this.personas = datos;
-      },
-      (error) => console.log(error)
-    );
-  }
+    this.servicioStorage.getObject("personas").then((data)=>{
+      if(data)
+        this.personas = <Persona[]><unknown>data;
+    })
+    this.delay(3000).then(any=>{
+      this.servicioHttp.getList().subscribe(
+        (datos) => {
+          datos.map((persona) => Persona.fromJson(persona));
+          this.personas = datos;
+          this.servicioStorage.setObject("personas",this.personas);
 
-  public addPersona(item: Persona) {
-    this.personas = [...this.personas, item];
-    this.servicioHttp.createItem(item).subscribe((data)=>{
-      console.log(data);
-    },
-    (error)=>{
-      console.log(error);
+        },
+        (error) => console.log(error)
+      );
+
     });
+  }
+  
+  public addPersona(item: Persona) {
+    this.servicioHttp.createItem(item).subscribe(
+      (data) => {
+        console.log(data);
+        this.servicioStorage.setObject("personas",this.personas).then(()=>{
+          this.personas = [...this.personas,item];
+        })
+        .catch((error)=>{
+          //hay que decidir que hacer. 
+          //el storage no es importante y actualizo this.personas
+          this.personas = [...this.personas,item];
+          //el storage es importante
+         // this.servicioHttp.deleteItem(data.id);
+
+        })
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
     //this.servicioStorage.setObject("personas", this.personas);
   }
   public getPersona(id): Persona {
@@ -55,4 +74,12 @@ export class ServicioPersonasService {
       }
     })*/
   }
+  async delay(ms: number) {
+    await new Promise(resolve => setTimeout(()=>resolve(), ms)).then(
+      ()=>
+      {
+        console.log("fired");
+      }
+      );
+}
 }
